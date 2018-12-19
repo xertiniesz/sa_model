@@ -12,7 +12,7 @@ class model extends Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount = () => {
     //ADD SCENE
     this.scene = new THREE.Scene();
 
@@ -77,7 +77,6 @@ class model extends Component {
     loader.load('http://127.0.0.1:8080/ring2.OBJ', 
       (object) => {
         object.traverse( function ( child ) {
-          console.log(child);
           if ( child.type === 'Mesh' ) {
             let raycaster = new THREE.Raycaster();
             raycaster.set(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, -1, 0));
@@ -88,15 +87,26 @@ class model extends Component {
                             new THREE.Euler(0, 0, 0), 
                             new THREE.Vector3(1, 1, 1)
                           );
-
-            let material = new THREE.MeshPhongMaterial( { color: 0xC0C0C0, shininess: 200, map: this.bufferTexture } );
+            const decalMaterial = new THREE.MeshPhongMaterial({
+              specular: 0x444444,
+              normalMap: this.bufferTexture,
+              normalScale: new THREE.Vector2( 1, 1 ),
+              shininess: 0,
+              transparent: true,
+              depthTest: true,
+              depthWrite: false,
+              polygonOffset: true,
+              polygonOffsetFactor: - 4,
+              wireframe: false
+            })
+            const decalMesh = new THREE.Mesh(decal, decalMaterial);
+            let material = new THREE.MeshPhongMaterial( { color: 0xC0C0C0, shininess: 200 } );
             child.material = material;
           }
 				});
         this.scene.add(object);
       }
     );
-    
     this.start();
   }
 
@@ -122,8 +132,8 @@ class model extends Component {
   }
 
   renderScene = () => {
-    this.renderer.render(this.scene, this.camera);
     this.renderer.render(this.bufferScene, this.camera2, this.bufferTexture);
+    this.renderer.render(this.scene, this.camera);
   }
 
   render() {
