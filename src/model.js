@@ -87,18 +87,22 @@ class model extends Component {
                             new THREE.Euler(0, 0, 0), 
                             new THREE.Vector3(1, 1, 1)
                           );
-            const decalMaterial = new THREE.MeshPhongMaterial({
-              specular: 0x444444,
-              normalMap: this.bufferTexture,
-              normalScale: new THREE.Vector2( 1, 1 ),
-              shininess: 0,
-              transparent: true,
-              depthTest: true,
-              depthWrite: false,
-              polygonOffset: true,
-              polygonOffsetFactor: - 4,
-              wireframe: false
-            })
+            let decalMaterial = new THREE.MeshPhongMaterial()
+            THREE.TextureLoader.load('http://127.0.0.1:8080/splatter.png', (texture) => {
+                decalMaterial = THREE.MeshPhongMaterial({
+                  specular: 0x444444,
+                  map: texture,
+                  normalScale: new THREE.Vector2( 1, 1 ),
+                  shininess: 0,
+                  transparent: true,
+                  depthTest: true,
+                  depthWrite: false,
+                  polygonOffset: true,
+                  polygonOffsetFactor: - 4,
+                  wireframe: false
+                })
+              }
+            )
             const decalMesh = new THREE.Mesh(decal, decalMaterial);
             let material = new THREE.MeshPhongMaterial( { color: 0xC0C0C0, shininess: 200 } );
             child.material = material;
