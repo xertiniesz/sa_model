@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Grid } from 'semantic-ui-react';
 import Menu from './menu';
-import Model from './model';
+import Model from './Model/model';
 import './App.css';
 
 class App extends Component {
